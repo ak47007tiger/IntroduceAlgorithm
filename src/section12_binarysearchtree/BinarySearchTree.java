@@ -8,7 +8,7 @@ public class BinarySearchTree {
 			parent = curNode;
 			if (insertNode.key < curNode.key) {
 				curNode = curNode.left;
-			} else{
+			} else {
 				curNode = curNode.right;
 			}
 		}
@@ -20,8 +20,47 @@ public class BinarySearchTree {
 		}
 	}
 
+	public void delete(Node deleteNode) {
+		boolean isLeft = deleteNode.parent.left == deleteNode;
+		Node parent = deleteNode.parent;
+		Node deleteNodeLeft = deleteNode.left;
+		Node deleteNodeRight = deleteNode.right;
+		if (null == deleteNodeLeft && null == deleteNodeRight) {
+			if (isLeft) {
+				parent.left = null;
+			} else {
+				parent.right = null;
+			}
+		} else if (null == deleteNodeLeft) {
+			deleteNodeRight.parent = parent;
+			if (isLeft) {
+				parent.left = deleteNodeRight;
+			} else {
+				parent.right = deleteNodeRight;
+			}
+		} else if (null == deleteNodeRight) {
+			deleteNodeLeft.parent = parent;
+			if (isLeft) {
+				parent.left = deleteNodeLeft;
+			} else {
+				parent.right = deleteNodeLeft;
+			}
+		} else {
+			Node successor = successor(deleteNode);
+			delete(successor);
+			successor.parent = parent;
+			if (isLeft) {
+				parent.left = successor;
+			} else {
+				parent.right = successor;
+			}
+			successor.left = deleteNodeLeft;
+			successor.right = deleteNodeRight;
+		}
+	}
+
 	public Node root(Node node) {
-		while(null != node.parent){
+		while (null != node.parent) {
 			node = node.parent;
 		}
 		return node;
@@ -84,8 +123,9 @@ public class BinarySearchTree {
 		// node == null || node.parent.right == node
 		return node.parent;
 	}
-	public void firstShow(Node root){
-		if(null != root){
+
+	public void firstShow(Node root) {
+		if (null != root) {
 			System.out.print(root.key + " ");
 			firstShow(root.left);
 			firstShow(root.right);

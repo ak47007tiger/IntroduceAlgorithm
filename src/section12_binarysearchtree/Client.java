@@ -60,10 +60,33 @@ public class Client {
 		searchTree.firstShow(root);
 		System.out.println();
 	}
+	
+	public static void test3(){
+		int[] keys = { 3, 7, 5, 12, 8, 22, 16, 14, 9 };
+
+		Node root = new Node();
+		root.key = 13;
+
+		BinarySearchTree searchTree = new BinarySearchTree();
+
+		for (int i = 0; i < keys.length; i++) {
+			Node node = new Node();
+			node.key = keys[i];
+			searchTree.insert(root, node);
+		}
+		searchTree.firstShow(root);
+		System.out.println();
+		System.out.println("-----");
+		searchTree.delete(searchTree.search(root, 7));
+		searchTree.firstShow(root);
+		System.out.println();
+		System.out.println("-----");
+	}
 
 	public static void main(String[] args) {
 //		test1();
 		System.out.println("*************************");
-		test2();
+//		test2();
+		test3();
 	}
 }
