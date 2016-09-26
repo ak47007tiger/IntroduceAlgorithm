@@ -1,6 +1,5 @@
 package personal;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -13,18 +12,22 @@ public class MyTrie {
 	public static void main(String[] args) {
 		MyTrie myTrie = new MyTrie();
 		String[] histroyWords = { "香蕉你个巴拉", "榴莲糖", "榴莲弹", "鱼类", "鱼肉", "鱼香肉丝",
-				"高考内容", "高中老师", "高级货", "高达", "高老庄", "球形闪电", "球星" };
+				"高考内容", "高中老师", "高级货", "高达","高级货贵", "高老庄", "球形闪电", "球星","a1","a2","a3" };
 		for (String word : histroyWords) {
 			myTrie.insert(word);
 		}
 		System.out.println(null != myTrie.contains("高达"));
 		System.out.println(null != myTrie.contains("鱼肉"));
-		List<String> result = myTrie.getWordsWithPre("高");
+		TrieNode gaoji = myTrie.contains("高级");
+		System.out.println(gaoji.key);
+		List<String> result = myTrie.getWordsWithPre("高级");
 		System.out.println(result.size());
 		for (String word : result) {
 			System.out.println(word);
 		}
 	}
+
+	LinkedList<TrieNode> children = new LinkedList<TrieNode>();
 
 	public List<String> getWordsWithPre(String pre) {
 		TrieNode last;
@@ -33,6 +36,14 @@ public class MyTrie {
 		} else {
 			return null;
 		}
+	}
+	
+	public List<String> allWords(){
+		List<String> words = new LinkedList<String>();
+		for(TrieNode child : children){
+			words.addAll(child.allWords());
+		}
+		return words;
 	}
 
 	public void insert(String words) {
@@ -64,7 +75,7 @@ public class MyTrie {
 				position++;
 			}
 			if (position == word.length()) {
-				return root;
+				return node;
 			}
 		}
 		return null;
@@ -85,70 +96,5 @@ public class MyTrie {
 		}
 		return null;
 	}
-
-	LinkedList<TrieNode> children = new LinkedList<TrieNode>();
-
-	public MyTrie() {
-
-	}
-
-	class TrieNode {
-		char key;
-		LinkedList<TrieNode> children = new LinkedList<TrieNode>();
-		Comparable<TrieNode> c = new Comparable<MyTrie.TrieNode>() {
-			@Override
-			public int compareTo(TrieNode o) {
-				return 0;
-			}
-		};
-
-		public List<String> allWords() {
-			List<String> words = new ArrayList<String>();
-			if(children.size() == 0){
-				words.add(String.valueOf(key));
-			}else{
-				for (TrieNode child : children) {
-					List<String> childWords = child.allWords();
-					for (String childWrod : childWords) {
-						char[] cbuf = new char[childWrod.length() + 1];
-						cbuf[0] = key;
-						System.arraycopy(childWrod.toCharArray(), 0, cbuf, 1,
-								childWrod.length());
-						words.add(new String(cbuf));
-					}
-				}
-			}
-			return words;
-		}
-
-		public void insert(String substring) {
-			int position = 0;
-			int length = substring.length();
-			TrieNode parent = this;
-			while (position < length) {
-				TrieNode node = new TrieNode();
-				node.key = substring.charAt(position);
-				parent.children.add(node);
-				parent = node;
-				position++;
-			}
-		}
-
-		public TrieNode search(char charAt) {
-			for (TrieNode node : children) {
-				if (charAt == node.key) {
-					return node;
-				}
-			}
-			return null;
-		}
-
-		public boolean contains(String word) {
-			return false;
-		}
-
-		public int childSize() {
-			return children.size();
-		}
-	}
+	
 }

@@ -15,6 +15,7 @@ public class SimpleQuickSort {
 		}
 	}
 
+	/**/
 	int pointUp(int startIndex, int endIndex) {
 		int x = array[endIndex];
 		int i = startIndex - 1;
